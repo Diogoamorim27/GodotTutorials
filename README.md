@@ -1,2 +1,2 @@
-# GodotTutorials
-Tutorials for Godot Engine
+# Godot Engine Tutorials
+Some Tutorials and Templates for Godot Engine
