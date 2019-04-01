@@ -2,7 +2,7 @@
 
 Hey Guys! In this tutorial I'll teach how to implement a branching dialog system on Godot 3.1 with a dynamic GUI, meaning it responds accordingly to the number of dialogue options presented.
 
-![](Pic1.gif)
+![](Pictures/Pic1.gif)
  
 The way we go about it is by using the [Dialog Graph Plugin](https://github.com/ejnij/Godot-DialogGraphPlugin/) made by the user [ejnij](https://github.com/ejnij). To get the plugin from **inside** godot you must:
 
@@ -13,7 +13,7 @@ The way we go about it is by using the [Dialog Graph Plugin](https://github.com/
 
 After that, the **Dialog Manager** node should appear on the **Create New Node** search bar:
 
-![](Pic2.gif)
+![](Pictures/Pic2.gif)
 
 ## Creating New Dialog
 
@@ -21,7 +21,7 @@ The way you create the actual dialog is pretty straightforward, and the [README]
 
 To create a dialog just **click the Dialog Manager node** and then on **Dialog Graph Editor** on the bottom of the screen, right next to the animation tab.
 
-![](Pic3.gif)
+![](Pictures/Pic3.gif)
 
 You'll see this tab pop up, and to start crating dialogue just click the **"Conversation"** button on the **top left-hand corner** of the tab. You can click on **speech** to create a line of dialogue. To connect the line you just wrote to the conversation, just **drag from the yellow dot on the right of the conversation node to the dot on the left of the speech node.**
 
@@ -29,7 +29,7 @@ By connecting these nodes, you can create your conversation. To add options to t
 
 For this tutorial we'll create an exemple dialogue that uses every node. For more detailed descriptions of the nodes please refer to the [original repo](https://github.com/ejnij/Godot-DialogGraphPlugin/).
 
-![](Pic4.PNG)
+![](Pictures/Pic4.PNG)
 
 The graph might bee a little too much to follow but remeber our system is supposed to work with every dialogue created, so you can create one however you like.
 
@@ -37,11 +37,11 @@ The graph might bee a little too much to follow but remeber our system is suppos
 
 Let's get to the fun part! First we need the GUI elements to display our text. I'm gonna be using a Panel and a Label. Add both of them and adjust the hieranchy so it looks like this:
 
-![](Pic5.PNG)
+![](Pictures/Pic5.PNG)
 
 You shoud also adjust the panel and label size and position to your liking. Note that moving GUI elements around can be tricky as they don't work like other 2d nodes, so if you have any questions please refer to the [docs](http://docs.godotengine.org/en/3.1/tutorials/gui/) or other tutorials. Mine looks like this:
 
-![](Pic6.PNG)
+![](Pictures/Pic6.PNG)
 
 Let's attach a **new script** to the panel and start displaying some text. The first thing we have to do is create an access point to the Dialog Manager, and make sure the function _"start_dialog()"_ is called whenever we enter this scene. We also need to connect the Dialog Manager's _new_speech_ to our panel script, to make sure we know what text to show when our story progresses. Then, it's necessary to create an access point to our label and assign the new lines of text to it.
 
@@ -64,4 +64,4 @@ assign the first item of the array to the label.
 
 If you run the scene, you should see the first line of dialogue on the panel.
 
-![](Pic7.PNG)
+![](Pictures/Pic7.PNG)
