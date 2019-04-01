@@ -43,13 +43,25 @@ You shoud also adjust the panel and label size and position to your liking. Note
 
 ![](Pic6.PNG)
 
-Let's attach a **new script** to the panel and start displaying some text. The first thing we have to do is create an access point to the Dialog Manager, and make sure the function _"start_dialog()"_ is called whenever we enter this scene. 
+Let's attach a **new script** to the panel and start displaying some text. The first thing we have to do is create an access point to the Dialog Manager, and make sure the function _"start_dialog()"_ is called whenever we enter this scene. We also need to connect the Dialog Manager's _new_speech_ to our panel script, to make sure we know what text to show when our story progresses. Then, it's necessary to create an access point to our label and assign the new lines of text to it.
 
 ```gdscript
 extends Panel
 
 onready var dialog_manager = $DialogManager
+onready var dialog_text_box : Label = $Label
 
 func _ready():
 	dialog_manager.start_dialog()
+	
+
+func _on_DialogManager_new_speech(speech_codes):
+	dialog_text_box.text = speech_codes[0]
+	pass
 ```
+As you might have noticed, we recieve an array of speeches from the manager. That is due to a translation functionality. Since we won't be using it here, we will only 
+assign the first item of the array to the label.
+
+If you run the scene, you should see the first line of dialogue on the panel.
+
+![](Pic7.PNG)
