@@ -35,6 +35,21 @@ The graph might bee a little too much to follow but remeber our system is suppos
 
 ## Displaying Our Dialogue
 
+Let's get to the fun part! First we need the GUI elements to display our text. I'm gonna be using a Panel and a Label. Add both of them and adjust the hieranchy so it looks like this:
 
+![](Pic5.PNG)
 
+You shoud also adjust the panel and label size and position to your liking. Note that moving GUI elements around can be tricky as they don't work like other 2d nodes, so if you have any questions please refer to the [docs](http://docs.godotengine.org/en/3.1/tutorials/gui/) or other tutorials. Mine looks like this:
 
+![](Pic6.PNG)
+
+Let's attach a **new script** to the panel and start displaying some text. The first thing we have to do is create an access point to the Dialog Manager, and make sure the function _"start_dialog()"_ is called whenever we enter this scene. 
+
+```gdscript
+extends Panel
+
+onready var dialog_manager = $DialogManager
+
+func _ready():
+	dialog_manager.start_dialog()
+```
