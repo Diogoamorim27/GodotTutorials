@@ -45,6 +45,8 @@ You shoud also adjust the panel and label size and position to your liking. Note
 
 Let's attach a **new script** to the panel and start displaying some text. The first thing we have to do is create an access point to the Dialog Manager, and make sure the function _"start_dialog()"_ is called whenever we enter this scene. We also need to connect the Dialog Manager's _new_speech_ to our panel script, to make sure we know what text to show when our story progresses. Then, it's necessary to create an access point to our label and assign the new lines of text to it.
 
+![](Pictures/Pic8.gif)
+
 ```gdscript
 extends Panel
 
@@ -89,3 +91,30 @@ Now we should be able to advance to another line of speech.
 
 ![](Pictures/Pic10.gif)
 
+You can see that if you try and click again, nothing will happen. That is because the next node in the dialogue is a choice, and we need some more code for that.
+
+First connect the signal *_new_choice* the same way we did to *_gui_input*.
+
+Since the number of buttons is **dynamic** we want to create a dictionary to store them, so create and free them as necessary. 
+
+The argument *"choices"* recieved by *_on_DialogManager_new_choice* is an array of strings of the options the player can choose. Their indexes are the same on the processing on the *"Dialog Manager"* node, so when the player chooses one of them, we should get the index on the *"choices"* vector to tell the *"Dialog Manager"* wich choice was picked.
+
+```gdscript
+
+onready var choice_container = $VBoxContainer
+
+var choice_buttons = {}
+
+func _on_DialogManager_new_choice(choices):
+	if choice_buttons.empty():
+		var choice_index = 0
+		for choice in choices:
+			choice_buttons[choice_index] = Button.new()
+			choice_container.add_child(choice_buttons[choice_index])
+			choice_buttons[choice_index].text = choice
+			choice_index += 1
+
+
+```
+
+[//]: # (Trocar gif/botar na parte de criar on_new_speech, explicaresse ultimo codigo)
