@@ -65,3 +65,27 @@ assign the first item of the array to the label.
 If you run the scene, you should see the first line of dialogue on the panel.
 
 ![](Pictures/Pic7.PNG)
+
+Great! But how do advance the dialog? We need to choose a type of user input to trigger it. In this exemple I'll go with a mouse click on the panel area because it seems intuitive to me. This is pretty easy to change so if your game doesn't use a mouse a space bar press also works great.
+
+Theres a default signal from the panel node we can connect to the script to tell us when an input event occurs.
+
+![](Pictures/Pic8.gif)
+
+The thing is, a mouse click is not defined as a default input. So we need to open **Project Settings>Input Map** and add it.
+
+![](Pictures/Pic9.gif)
+
+After that is set up, we can write the body of the *"func   _on_Panel_gui_input(event):"* function.
+
+```gdscript
+
+func _on_Panel_gui_input(event):
+	if  event.is_action_pressed("mouse_click"):
+		dialog_manager.continue_dialog()
+
+```
+Now we should be able to advance to another line of speech.
+
+![](Pictures/Pic10.gif)
+
