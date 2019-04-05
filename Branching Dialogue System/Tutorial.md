@@ -45,7 +45,7 @@ You shoud also adjust the panel and label size and position to your liking. Note
 
 Let's attach a **new script** to the panel and start displaying some text. The first thing we have to do is create an access point to the Dialog Manager, and make sure the function _"start_dialog()"_ is called whenever we enter this scene. We also need to connect the Dialog Manager's _new_speech_ to our panel script, to make sure we know what text to show when our story progresses. Then, it's necessary to create an access point to our label and assign the new lines of text to it.
 
-![](Pictures/Pic8.gif)
+![](Pictures/Connect_new_speech_to_panel.gif)
 
 ```gdscript
 extends Panel
@@ -93,15 +93,23 @@ Now we should be able to advance to another line of speech.
 
 You can see that if you try and click again, nothing will happen. That is because the next node in the dialogue is a choice, and we need some more code for that.
 
-First connect the signal *_new_choice* the same way we did to *_gui_input*.
+First connect the signal *_new_choice* from *Dialog Manager* to the panel the same way we did to *_gui_input*.
 
-Since the number of buttons is **dynamic** we want to create a dictionary to store them, so create and free them as necessary. 
+Since the number of buttons is **dynamic** we want to create a dictionary to store them, so we can create and free them as necessary. 
 
 The argument *"choices"* recieved by *_on_DialogManager_new_choice* is an array of strings of the options the player can choose. Their indexes are the same on the processing on the *"Dialog Manager"* node, so when the player chooses one of them, we should get the index on the *"choices"* vector to tell the *"Dialog Manager"* wich choice was picked.
 
+Since we'll generate the buttons by code, we need to make sure they are instanced in the correct positions. For that reason we're gonna add a "_VBoxContainer_" to our tree to have the buttons spawn nicely one under another.
+
+By now the tree should look like this:
+
+![](Pictures/Tree_with_vboxc.PNG)
+
+Now let's go over the code:
+
 ```gdscript
 
-onready var choice_container = $VBoxContainer
+onready var choice_container : VBoxContainer = $VBoxContainer
 
 var choice_buttons = {}
 
@@ -117,4 +125,16 @@ func _on_DialogManager_new_choice(choices):
 
 ```
 
-[//]: # (Trocar gif/botar na parte de criar on_new_speech, explicaresse ultimo codigo)
+Straight away we store the access point to our _VBox_ in a variable (don't forget static typing! It's good for you and the enviroment).
+
+Since *"choices"* are the actual values of the strings, as our *"for"* loop will go over them, we need to count the index ourselves, by creating a *"choice_index"* variable.
+
+What we're doing basically is, to each choice, we add an instance of the class *"Button"* to our dictionary in the same index as the *"choices"* vector. We then add them as children of the *"choice_container"* and assign their text to the buttons. Finally, we increase *"choice_index"*.
+
+![](Pictures/Options_shown.gif)
+
+But clicking the options doesn't actually do anything. What do we need?
+
+**More code.**
+
+Since the buttons are generated trough code, we can't connect the signals to pre-existing functions, as we don't know how many buttons there will be. Hence, we're going to check in      
