@@ -25,7 +25,7 @@ To create a dialog just **click the "Dialog Manager" node** and then on **"Dialo
 
 You'll see this tab pop up, and to start creating dialog just click the **"Conversation"** button on the **top left-hand corner** of the tab. You can click on **"Speech"** to create a line of dialog. To connect the line you just wrote to the conversation, just **drag from the yellow dot on the right of the conversation node to the dot on the left of the speech node.**
 
-By connecting these nodes, you can create your conversation. To add options to the choices you create, click the "+" button on the node. The **"Condition"** node is similar to a choice, but checks a boolean variable. **The path to the variable is relative to the parent of the Dialog Manager.** The **"Mux"** functions by feeding multiple paths back to a single node. You can have multiple conversations on a single file, and the **"Jump"** node jumps to a given conversation**. You can alson access them by code.
+By connecting these nodes, you can create your conversation. To add options to the choices you create, click the "+" button on the node. The **"Condition"** node is similar to a choice, but checks a boolean variable. **The path to the variable is relative to the parent of the Dialog Manager.** The **"Mux"** functions by feeding multiple paths back to a single node. You can have multiple conversations on a single file, and the **"Jump"** node jumps to a given conversation**. You can also access them by code.
 
 For this tutorial we'll create an example dialog that uses every node. For more detailed descriptions of the nodes please refer to the [original repo](https://github.com/ejnij/Godot-DialogGraphPlugin/).
 
@@ -130,7 +130,7 @@ func _on_DialogManager_new_choice(choices):
 
 ```
 
-Straight away we **store the access point to our _VBox_ in a variable** (don't forget static typing! It's good for you and the enviroment).
+Straight away we **store the access point to our _VBox_ in a variable** (don't forget static typing! It's good for you and the environment).
 
 Since `choices` are the actual values of the strings, as our `for` loop will go over them, we need to count the index ourselves, by creating a `choice_index` variable.
 
@@ -142,7 +142,7 @@ But clicking the options doesn't actually do anything. What do we need?
 
 **More code.**
 
-Since the buttons are generated trough code, we can't connect the `pressed()` signal to pre-existing functions, as we don't know how many buttons there will be. Hence, we're going to check in the `_process` function if a button has been pressed. Remember every button is stored in the dicitonary, so we can just go through tem in a `for` loop. 
+Since the buttons are generated through code, we can't connect the `pressed()` signal to pre-existing functions, as we don't know how many buttons there will be. Hence, we're going to check in the `_process` function if a button has been pressed. Remember every button is stored in the dicitonary, so we can just go through tem in a `for` loop. 
 
 ```gdscript
 func _process(delta):
@@ -177,7 +177,7 @@ Maybe...
 
 ![](Pictures/Soup_added.PNG)
 
-Go on and add a check box or whatever sort of button you like, and some text to your liking also. To access this in our panel script, we create an acess point, and save its contidion to a variable in `_process(delta)`. Pretty simple.
+Go on and add a check box or whatever sort of button you like, and some text to your liking also. To access this in our panel script, we create an access point, and save its condition to a variable in `_process(delta)`. Pretty simple.
 
 ```gdscript
 onready var soup_pressed : CheckBox = $CheckBox
