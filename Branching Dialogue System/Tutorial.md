@@ -23,9 +23,9 @@ To create a dialog just **click the Dialog Manager node** and then on **Dialog G
 
 ![](Pictures/Pic3.gif)
 
-You'll see this tab pop up, and to start crating dialogue just click the **"Conversation"** button on the **top left-hand corner** of the tab. You can click on **speech** to create a line of dialogue. To connect the line you just wrote to the conversation, just **drag from the yellow dot on the right of the conversation node to the dot on the left of the speech node.**
+You'll see this tab pop up, and to start crating dialogue just click the *Pictures/PicConversation`* button on the **top left-hand corner** of the tab. You can click on **speech** to create a line of dialogue. To connect the line you just wrote to the conversation, just **drag from the yellow dot on the right of the conversation node to the dot on the left of the speech node.**
 
-By connecting these nodes, you can create your conversation. To add options to the choices you create, click the "+" button on the node. The **"condition"** node is similar to a choice, but checks a boolean variable. **The path to the variable is relative to the parent of the Dialog Manager.** The mux functions by feeding multiple paths back to a single node. You can have multiple conversations on a single file, and the **"Jump" node jumps to a given conversation**. You can alson access them by code.
+By connecting these nodes, you can create your conversation. To add options to the choices you create, click the "+" button on the node. The `condition` node is similar to a choice, but checks a boolean variable. **The path to the variable is relative to the parent of the Dialog Manager.** The mux functions by feeding multiple paths back to a single node. You can have multiple conversations on a single file, and the *`Jump" node jumps to a given conversation**. You can alson access them by code.
 
 For this tutorial we'll create an exemple dialogue that uses every node. For more detailed descriptions of the nodes please refer to the [original repo](https://github.com/ejnij/Godot-DialogGraphPlugin/).
 
@@ -78,7 +78,7 @@ The thing is, a mouse click is not defined as a default input. So we need to ope
 
 ![](Pictures/Pic9.gif)
 
-After that is set up, we can write the body of the *"func   _on_Panel_gui_input(event):"* function.
+After that is set up, we can write the body of the `func   _on_Panel_gui_input(event):` function.
 
 ```gdscript
 
@@ -97,7 +97,7 @@ First connect the signal *_new_choice* from *Dialog Manager* to the panel the sa
 
 Since the number of buttons is **dynamic** we want to create a dictionary to store them, so we can create and free them as necessary. 
 
-The argument *"choices"* recieved by *_on_DialogManager_new_choice* is an array of strings of the options the player can choose. Their indexes are the same on the processing on the *"Dialog Manager"* node, so when the player chooses one of them, we should get the index on the *"choices"* vector to tell the *"Dialog Manager"* wich choice was picked.
+The argument `choices` recieved by *_on_DialogManager_new_choice* is an array of strings of the options the player can choose. Their indexes are the same on the processing on the `Dialog Manager` node, so when the player chooses one of them, we should get the index on the `choices` vector to tell the `Dialog Manager` wich choice was picked.
 
 Since we'll generate the buttons by code, we need to make sure they are instanced in the correct positions. For that reason we're gonna add a "_VBoxContainer_" to our tree to have the buttons spawn nicely one under another.
 
@@ -127,9 +127,9 @@ func _on_DialogManager_new_choice(choices):
 
 Straight away we store the access point to our _VBox_ in a variable (don't forget static typing! It's good for you and the enviroment).
 
-Since *"choices"* are the actual values of the strings, as our *"for"* loop will go over them, we need to count the index ourselves, by creating a *"choice_index"* variable.
+Since `choices` are the actual values of the strings, as our `for` loop will go over them, we need to count the index ourselves, by creating a `choice_index` variable.
 
-What we're doing basically is, to each choice, we add an instance of the class *"Button"* to our dictionary in the same index as the *"choices"* vector. We then add them as children of the *"choice_container"* and assign their text to the buttons. Finally, we increase *"choice_index"*.
+What we're doing basically is, to each choice, we add an instance of the class `Button` to our dictionary in the same index as the `choices` vector. We then add them as children of the `choice_container` and assign their text to the buttons. Finally, we increase `choice_index`.
 
 ![](Pictures/Options_shown.gif)
 
@@ -137,4 +137,62 @@ But clicking the options doesn't actually do anything. What do we need?
 
 **More code.**
 
-Since the buttons are generated trough code, we can't connect the signals to pre-existing functions, as we don't know how many buttons there will be. Hence, we're going to check in      
+Since the buttons are generated trough code, we can't connect `pressed()` signal to pre-existing functions, as we don't know how many buttons there will be. Hence, we're going to check in the `_process` function if a button has been pressed. Remember every button is stored in the dicitonary, so we can just go through tem in a `for` loop. 
+
+```gdscript
+func _process(delta):
+	for button in choice_buttons:
+		if choice_buttons[button].pressed:
+			dialog_manager.choice_picked(button)
+
+```
+
+![](Pictures/Options_dont_disappear.gif)
+
+Notice that even though the dialog advances, the buttons don't disappear after we click them. To fix this we're gonna check if the buttons list is currently empty, and if not, delete the buttons and empty the list. We'll do this inside `_on_DialogManager_new_speech` because that's when a new dialog is coming.
+
+```gdscript
+func _on_DialogManager_new_speech(speech_codes):
+	if !choice_buttons.empty():
+		for button in choice_buttons:
+			choice_buttons[button].queue_free()
+		choice_buttons.clear()
+	dialog_text_box.text = speech_codes[0]
+```
+
+Every thing seems to be working fine! This is already a functioning system, but there's a couple last things I want to show you.
+
+## Contidional Branching
+
+Maybe you don't your player to see a certain choice if he doens't have a certain item, or didn't choose the correct option on a prior choice. The way this plugin handles it is by checking a boolean variable. **The path to the variable is relative to the parend of the `Dialog Manager` node.**
+
+If you explored the options of our dialogue file until now, you might have come across some nonsense about soup. Something along the lines of `"I would never offer you soup"`. But maybe the player likes soup? Maybe they'd like some delicious soup. There's **literally** no way of knowing. How can we ever find out? If there only was checkbox they could tick to indicate their likness of soup. Hmmm... 🤔
+
+Maybe... 
+
+![](Pictures/Soup_added.PNG)
+
+Go on and add a check box or whatever sort of button you like, and some text to your liking also. To access this in our panel script, we create an acess point, and save its contidion to a variable in `_process(delta)`. Pretty simple.
+
+```gdscript
+onready var soup_pressed : CheckBox = $CheckBox
+
+var soup_pressed
+
+func _process(delta):
+	soup_pressed = soup_check_box.pressed
+	for button in choice_buttons:
+		if choice_buttons[button].pressed:
+			dialog_manager.choice_picked(button)
+```
+Cool! What now?
+
+## Ending The Dialog
+
+When your dialog has ended, you probably want to have the pannel disapear. Just connect the Dialog Manager's `dialog_finished` signal to the panel and delete it!
+
+```gscript
+func _on_DialogManager_dialog_finished():
+	queue_free()
+```
+Thats pretty much it! Thank you for reading and until next time! :^)
